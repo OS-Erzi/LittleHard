@@ -3,7 +3,7 @@ from discord.ext import commands
 
 from structs.button import InviteButton, QuestionsButton
 
-from core import ProjectType, settings
+from core import ProjectType
 
 class ButtonAction(commands.Cog):
     def __init__(self, client: ProjectType):

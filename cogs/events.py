@@ -10,7 +10,7 @@ from discord import (
 
 from discord.ext import commands
 
-from core import settings, ProjectType
+from core import ProjectType
 
 from structs.button import InviteButton, QuestionsButton
 
