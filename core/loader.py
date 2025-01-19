@@ -7,4 +7,4 @@ def start_loader():
     intents = Intents.all()
     activity = CustomActivity(name=settings.bot.BOT_DESCRIPTION)
     bot = ProjectType(intents=intents, activity=activity, command_prefix="!")
-    bot.run(settings.bot.TEST_TOKEN)
+    bot.run(settings.bot.TOKEN)

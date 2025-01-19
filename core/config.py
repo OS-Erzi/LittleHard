@@ -9,7 +9,7 @@ class EnvBaseSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
 class BotSettings(EnvBaseSettings):
-    TEST_TOKEN: str
+    TOKEN: str
     LOAD_TITLE: str
     BOT_DESCRIPTION: str
 
