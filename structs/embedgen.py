@@ -71,7 +71,7 @@ class EmbedGenerator(View):
             "title": {
                 "title": "Заголовок эмбеда",
                 "label": "Содержание",
-                "placeholder": "Новости"
+                "placeholder": "Название"
             },
             "description": {
                 "title": "Описание эмбеда",
@@ -170,7 +170,7 @@ class AddFieldModal(Modal):
         super().__init__(title="Добавить поле")
         self.embed = embed
         self.add_item(InputText(label="Название", placeholder="Введите название поля", custom_id="field_name"))
-        self.add_item(InputText(label="Значение", placeholder="Введите значение поля", custom_id="field_value"))
+        self.add_item(InputText(label="Значение", placeholder="Введите значение поля", custom_id="field_value", style=InputTextStyle.long))
         self.add_item(InputText(label="Inline", placeholder="True или False", custom_id="field_inline"))
 
     async def callback(self, interaction: Interaction):
