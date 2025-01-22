@@ -18,3 +18,8 @@ class QuestionsButton(View):
     @button(label="Задать вопрос", style=ButtonStyle.green, custom_id="question_modal")
     async def button2_callback(self, button: Button, interaction: Interaction):
         await interaction.response.send_modal(QuestionsModal())
+
+class UrlButton(View):
+    def __init__(self, url: str):
+        super().__init__(timeout=None)
+        self.add_item(Button(label="Переходник", url=url))

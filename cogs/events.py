@@ -62,6 +62,14 @@ class Events(commands.Cog):
                     title="Отсутствует обязательный аргумент",
                     description=f"Пропущен обязательный аргумент: {error.param.name}"
                 )
+            case commands.BadArgument():
+                match error.args[0] if error.args else None:
+                    case "ValidateInviteUrl":
+                        embed = Embed(
+                            color=Color.red(),
+                            title="Ошибка ссылки",
+                            description="Произошла ошибка при проверке ссылки-приглашения."
+                        )
             case _:
                 embed = Embed(
                     color=Color.red(),
