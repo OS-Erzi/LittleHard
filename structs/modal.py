@@ -114,7 +114,6 @@ class MediaRequestModal(Modal):
         }
 
         channel = await category.create_text_channel(name=interaction.user.display_name, overwrites=overwrites)
-        channel = await category.create_text_channel(name=interaction.user.display_name, overwrites=overwrites)
 
         chi = self.children
         content = f"||{interaction.user.mention}||"
