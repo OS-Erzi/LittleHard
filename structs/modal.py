@@ -3,6 +3,8 @@ from discord.ui import Modal, InputText
 
 from .button import UrlButton
 
+from .button import UrlButton
+
 from core import settings
 
 class InviteModal(Modal):
@@ -11,7 +13,9 @@ class InviteModal(Modal):
         
         self.add_item(InputText(label="Ваш ник", max_length=50, style=InputTextStyle.short))
         self.add_item(InputText(label="Ваши планы на сервер", max_length=2000, style=InputTextStyle.long))
+        self.add_item(InputText(label="Ваши планы на сервер", max_length=2000, style=InputTextStyle.long))
         self.add_item(InputText(label="Дюпать можно?", max_length=3, style=InputTextStyle.short))
+        self.add_item(InputText(label="Откуда вы узнали о нашем проекте?", max_length=250, style=InputTextStyle.short))
         self.add_item(InputText(label="Откуда вы узнали о нашем проекте?", max_length=250, style=InputTextStyle.short))
     
     async def callback(self, interaction: Interaction):
@@ -28,6 +32,7 @@ class InviteModal(Modal):
         embed = Embed(color=0x2b2d31, title=f"Заявка от {self.children[0].value}")
         embed.add_field(name="Планы на сервер.", value=self.children[1].value, inline=False)
         embed.add_field(name="Можно ли дюпать.", value=f"Ответ: {self.children[2].value}", inline=False)
+        embed.add_field(name="Узнал о проекте:", value=self.children[3].value, inline=True)
         embed.add_field(name="Узнал о проекте:", value=self.children[3].value, inline=True)
 
 
