@@ -117,10 +117,9 @@ class MediaRequestModal(Modal):
         channel = await category.create_text_channel(name=interaction.user.display_name, overwrites=overwrites)
 
         chi = self.children
+        content = f"||{interaction.user.mention}||"
 
         embed = Embed(color=0x2b2d31, title=f"Заявка")
-        embed.set_author(name=interaction.user, url=interaction.user, icon_url=interaction.user.display_avatar.url)
-
         embed.add_field(name=chi[0].label, value=f"> {chi[0].value}", inline=False)
         embed.add_field(name=chi[1].label, value=f"> {chi[1].value}", inline=True)
         embed.add_field(name=chi[1].label, value=f"> {chi[1].value}", inline=True)
@@ -128,7 +127,7 @@ class MediaRequestModal(Modal):
         embed.set_image(url=settings.images.INVISIBLE_URL)
 
         try:
-            await channel.send(interaction.user.mention, embed=embed, view=UrlButton(chi[3].value, "Канал"))
+            await channel.send(content, interaction.user.mention, embed=embed, view=UrlButton(chi[3].value, "Канал"))
         except:
             embed.add_field(name=chi[3].label, value=chi[3].value, inline=False)
-            await channel.send(interaction.user.mention, embed=embed)
+            await channel.send(content, interaction.user.mention, embed=embed)
