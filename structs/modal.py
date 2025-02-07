@@ -113,13 +113,15 @@ class MediaRequestModal(Modal):
             interaction.user: PermissionOverwrite(read_messages=True, send_messages=True)
         }
 
-        channel = await category.create_text_channel(name=self.children[0].value, overwrites=overwrites)
+        channel = await category.create_text_channel(name=interaction.user.display_name, overwrites=overwrites)
 
         chi = self.children
 
-        embed = Embed(color=0x2b2d31, title=f"Заявка от {interaction.user.mention}")
+        embed = Embed(color=0x2b2d31, title=f"Заявка")
+        embed.set_author(name=interaction.user, url=interaction.user, icon_url=interaction.user.display_avatar)
+
         embed.add_field(name=chi[0].label, value=f"> {chi[0].value}", inline=False)
-        embed.add_field(name=chi[1].label, value=f"> {chi[1].value}", inline=False)
+        embed.add_field(name=chi[1].label, value=f"> {chi[1].value}", inline=True)
         embed.add_field(name=chi[2].label, value=f"> {chi[2].value}", inline=True)
         embed.set_image(url=settings.images.INVISIBLE_URL)
 
