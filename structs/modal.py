@@ -121,7 +121,6 @@ class MediaRequestModal(Modal):
         embed = Embed(color=0x2b2d31, title=f"Заявка")
         embed.add_field(name=chi[0].label, value=f"> {chi[0].value}", inline=False)
         embed.add_field(name=chi[1].label, value=f"> {chi[1].value}", inline=True)
-        embed.add_field(name=chi[1].label, value=f"> {chi[1].value}", inline=True)
         embed.add_field(name=chi[2].label, value=f"> {chi[2].value}", inline=True)
         embed.set_image(url=settings.images.INVISIBLE_URL)
 
