@@ -118,7 +118,7 @@ class MediaRequestModal(Modal):
         chi = self.children
 
         embed = Embed(color=0x2b2d31, title=f"Заявка")
-        embed.set_author(name=interaction.user, url=interaction.user, icon_url=interaction.user.display_avatar)
+        embed.set_author(name=interaction.user, url=interaction.user, icon_url=interaction.user.display_avatar.url)
 
         embed.add_field(name=chi[0].label, value=f"> {chi[0].value}", inline=False)
         embed.add_field(name=chi[1].label, value=f"> {chi[1].value}", inline=True)
