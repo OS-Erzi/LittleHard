@@ -1,13 +1,24 @@
-from discord import Embed, ApplicationContext, Option, ChannelType, abc, SlashCommandGroup, Message
+from discord import (
+    Embed, 
+    ApplicationContext, 
+    Option, 
+    ChannelType, 
+    abc, 
+    SlashCommandGroup, 
+    Message
+)
 from discord.ext import commands
-
 import re
-import aiohttp
 
-from structs.button import InviteButton, QuestionsButton, UrlButton
+from structs.button import (
+    UrlButton,
+    MediaRequestButton,
+    QuestionsButton, 
+    InviteButton 
+)
 from structs.embedgen import EmbedGenerator
 
-from core import ProjectType
+from core import ProjectType, settings
 
 class ButtonAction(commands.Cog):
     def __init__(self, client: ProjectType):
@@ -18,25 +29,52 @@ class ButtonAction(commands.Cog):
             return False
         return True
 
-    @commands.slash_command(name="заявки", description="Установить канал для принятия заявок на сервер")
+    @commands.slash_command(name="заявки", description="Установить канал для принятия заявок на категорию")
     @commands.has_guild_permissions(administrator=True)
     async def set_channel_for_invites(
         self, 
         ctx: ApplicationContext,
+        _type: Option(
+            str, 
+            name="категория", 
+            description="Категория принятия заявок", 
+            choices=["сервер", "медиа"]
+        ), #type: ignore
         channel: Option(abc.GuildChannel, name="канал", description="Текстовый канал или ветка форума", 
-                        channel_types=[ChannelType.text, ChannelType.public_thread, ChannelType.private_thread, ChannelType.news, ChannelType.news_thread],
+                        channel_types=[
+                            ChannelType.text, 
+                            ChannelType.public_thread, 
+                            ChannelType.private_thread, 
+                            ChannelType.news, 
+                            ChannelType.news_thread
+                        ],
                         required=True) #type: ignore
         ):
         await ctx.response.defer(ephemeral=True)
-        embed = Embed(
-            color=0xff5858, 
-            title="Подать заявку Hard Live", 
-            description="Нажмите снизу на кнопку \"Подать заявку\"\nНапишите свой ник, и расскажите планы на наш сервер"
-        )
-        
-        await channel.send(embed=embed, view=InviteButton())
-        await ctx.followup.send(f"Канал для заявок успешно установлен: {channel.mention}", ephemeral=True)
+        match _type:
+            case "сервер":
+                embed = Embed(
+                    color=0xff5858, 
+                    title="Подать заявку Hard Live", 
+                    description="Нажмите снизу на кнопку \"Подать заявку\"\nНапишите свой ник, и расскажите планы на наш сервер"
+                )
+                
+                await channel.send(embed=embed, view=InviteButton())
+                await ctx.followup.send(f"Канал для заявок успешно установлен: {channel.mention}", ephemeral=True)
+            case "медиа":
+                embed = Embed(
+                    color=0xff5858, 
+                    title="Медиа-партнерство с Hard Live", 
+                    description="> Мы открыты для сотрудничества с креативными контент-мейкерами и медиа-проектами. Давайте вместе создавать качественный контент и расширять аудиторию!"
+                )
+                embed.add_field(name="Преимущества партнерства", value="- Взаимная реклама\n- Совместные проекты\n- Доступ к эксклюзивному контенту")
+                embed.add_field(name="Как стать партнером?", value="Нажмите на кнопку \"Подать заявку\" ниже и заполните краткую форму о вашем проекте.")
+                embed.set_footer(text="Ваш успех - наш успех. Давайте расти вместе!")
+                embed.set_image(url=settings.images.INVISIBLE_URL)
 
+                await channel.send(embed=embed, view=MediaRequestButton())
+
+        await ctx.followup.send(f"Канал для \"{_type}\" заявок успешно установлен: {channel.mention}", ephemeral=True)
 
     @commands.slash_command(name="вопросы", description="Установить канал для создания вопросов по серверу")
     @commands.has_guild_permissions(administrator=True)
@@ -104,7 +142,7 @@ class ButtonAction(commands.Cog):
                 return
 
             # Создание новой View с обновленной кнопкой
-            view = UrlButton(new_url)
+            view = UrlButton(new_url, "Переходник")
 
             # Обновление сообщения с новой View
             await message.edit(view=view)

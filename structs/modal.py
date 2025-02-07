@@ -1,6 +1,8 @@
 from discord import Embed, Interaction, InputTextStyle, PermissionOverwrite, Thread, TextChannel
 from discord.ui import Modal, InputText
 
+from .button import UrlButton
+
 from core import settings
 
 class InviteModal(Modal):
@@ -8,8 +10,9 @@ class InviteModal(Modal):
         super().__init__(timeout=None, title="Заявка на HARD LIVE")
         
         self.add_item(InputText(label="Ваш ник", max_length=50, style=InputTextStyle.short))
-        self.add_item(InputText(label="Ваши планы на сервер", max_length=4000, style=InputTextStyle.long))
+        self.add_item(InputText(label="Ваши планы на сервер", max_length=2000, style=InputTextStyle.long))
         self.add_item(InputText(label="Дюпать можно?", max_length=3, style=InputTextStyle.short))
+        self.add_item(InputText(label="Откуда вы узнали о нашем проекте?", max_length=250, style=InputTextStyle.short))
     
     async def callback(self, interaction: Interaction):
         await interaction.response.defer()
@@ -25,6 +28,7 @@ class InviteModal(Modal):
         embed = Embed(color=0x2b2d31, title=f"Заявка от {self.children[0].value}")
         embed.add_field(name="Планы на сервер.", value=self.children[1].value, inline=False)
         embed.add_field(name="Можно ли дюпать.", value=f"Ответ: {self.children[2].value}", inline=False)
+        embed.add_field(name="Узнал о проекте:", value=self.children[3].value, inline=True)
 
 
         await channel.send(interaction.user.mention, embed=embed)
@@ -66,3 +70,56 @@ class QuestionsModal(Modal):
                 description=f"Вопрос задал - {user.mention}"
             ).set_footer(text=f"id: {user.id}")
             await thread.send(embed=embed)
+
+class MediaRequestModal(Modal):
+    def __init__(self):
+        super().__init__(timeout=None, title="Задать вопрос")
+        
+        self.add_item(
+            InputText(
+                label="Какой контент планируете снимать у нас?", 
+                max_length=2000, style=InputTextStyle.long)
+            )
+        self.add_item(
+            InputText(
+                label="Площадка для вашего контента",
+                placeholder="Youtube/Twitch/...",
+                max_length=2000, style=InputTextStyle.short)
+            )
+        self.add_item(
+            InputText(
+                label="Сколько у вас подписчиков/фоловеров.",
+                placeholder="от 100+ / от 25+",
+                max_length=8, style=InputTextStyle.short)
+            )
+        self.add_item(
+            InputText(
+                label="Ссылка на канал.",
+                placeholder="Поле для ссылки",
+                max_length=1000, style=InputTextStyle.short)
+            )
+    
+    async def callback(self, interaction: Interaction):
+        await interaction.response.defer()
+        category = interaction.guild.get_channel(settings.channelsid.CATEGORY_FOR_MEDIA_CHANNEL)
+
+        overwrites = {
+            interaction.guild.default_role: PermissionOverwrite(read_messages=False),
+            interaction.user: PermissionOverwrite(read_messages=True, send_messages=True)
+        }
+
+        channel = await category.create_text_channel(name=self.children[0].value, overwrites=overwrites)
+
+        chi = self.children
+
+        embed = Embed(color=0x2b2d31, title=f"Заявка от {interaction.user.mention}")
+        embed.add_field(name=chi[0].label, value=f"> {chi[0].value}", inline=False)
+        embed.add_field(name=chi[1].label, value=f"> {chi[1].value}", inline=False)
+        embed.add_field(name=chi[2].label, value=f"> {chi[2].value}", inline=True)
+        embed.set_image(url=settings.images.INVISIBLE_URL)
+
+        try:
+            await channel.send(interaction.user.mention, embed=embed, view=UrlButton(chi[3].value, "Канал"))
+        except:
+            embed.add_field(name=chi[3].label, value=chi[3].value, inline=False)
+            await channel.send(interaction.user.mention, embed=embed)

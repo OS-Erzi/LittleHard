@@ -231,7 +231,7 @@ class Get_Channel(View):
         if isinstance(channel, TextChannel):
             e = Embed(color=0x2b2d31, description="В течении нескольких секунд эмбед будет отправлен")
             await interaction.edit_original_response(embed=e, view=None)
-            await channel.send(content=self.content, embed=self.embed, view=UrlButton(self.sponsor_url))
+            await channel.send(content=self.content, embed=self.embed, view=UrlButton(self.sponsor_url, "Переходник"))
         else:
             embed = Embed(color=0x2b2d31, description="Невозможно отправить сообщение в этот канал")
             self.button_back()
