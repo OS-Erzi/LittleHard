@@ -127,7 +127,7 @@ class MediaRequestModal(Modal):
         embed.set_image(url=settings.images.INVISIBLE_URL)
 
         try:
-            await channel.send(content, interaction.user.mention, embed=embed, view=UrlButton(chi[3].value, "Канал"))
+            await channel.send(content, embed=embed, view=UrlButton(chi[3].value, "Канал"))
         except:
             embed.add_field(name=chi[3].label, value=chi[3].value, inline=False)
-            await channel.send(content, interaction.user.mention, embed=embed)
+            await channel.send(content, embed=embed)
