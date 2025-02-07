@@ -12,7 +12,11 @@ from discord.ext import commands
 
 from core import ProjectType
 
-from structs.button import InviteButton, QuestionsButton
+from structs.button import (
+    InviteButton, 
+    QuestionsButton,
+    MediaRequestButton
+)
 
 class Events(commands.Cog):
     def __init__(self, client: ProjectType):
@@ -22,6 +26,7 @@ class Events(commands.Cog):
     async def on_ready(self):
         self.client.add_view(InviteButton())
         self.client.add_view(QuestionsButton())
+        self.client.add_view(MediaRequestButton())
 
     @commands.Cog.listener()
     async def on_application_command_error(self, context: ApplicationContext, error: DiscordException):
