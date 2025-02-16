@@ -16,7 +16,6 @@ class InviteModal(Modal):
         self.add_item(InputText(label="Ваши планы на сервер", max_length=2000, style=InputTextStyle.long))
         self.add_item(InputText(label="Дюпать можно?", max_length=3, style=InputTextStyle.short))
         self.add_item(InputText(label="Откуда вы узнали о нашем проекте?", max_length=250, style=InputTextStyle.short))
-        self.add_item(InputText(label="Откуда вы узнали о нашем проекте?", max_length=250, style=InputTextStyle.short))
     
     async def callback(self, interaction: Interaction):
         await interaction.response.defer()
